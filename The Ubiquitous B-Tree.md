@@ -18,32 +18,32 @@ B树已经成为事实上的文件组织的标准。用户的文件索引、专�
 关键词和短语：B树、B*树、B+树、文件组织、索引   
 
 
-INTRODUCTION    介绍
-Operations on a File    操作一个文件
-1 THE BASIC B-TREE  基础的B树
-    Balancing   平衡
-    Insertion   插入
-    Deletion    删除
-2 THE COST OF OPERATIONS    操作的花费
-    Retrieval Costs     检索的开销
-    Insertion and Deletion Costs    插入和删除的开销
-    Sequential  Processing 顺序处理    
-3 B-TREE VARIANTS   B树变体 
-    B*-Trees
-    B*-Trees
-    Prefix B*-Trees
-    Virtual B-Trees
-    Compression
-    Variable Length Entries
-    Binary B-Trees
-    2-3 Trees and Theoreucal Results
-4 B-TREES 1N A MULTIUSER ENVIRONMENT
-    Security
-5 A GENERAL PURPOSE ACCESS METHOD USING
-    B*-TREES
-    Performance Enhancements
-    Tree-Structured Fde Directory
-    Other VSAM Facdltms
-SUMMARY
-ACKNOWLEDGMENTS
-REFERENCES
+INTRODUCTION    介绍        
+Operations on a File    操作一个文件        
+1 THE BASIC B-TREE  基础的B树       
+    Balancing   平衡        
+    Insertion   插入        
+    Deletion    删除        
+2 THE COST OF OPERATIONS    操作的花费      
+    Retrieval Costs     检索的开销      
+    Insertion and Deletion Costs    插入和删除的开销        
+    Sequential  Processing 顺序处理     
+3 B-TREE VARIANTS   B树变体         
+    B*-Trees        
+    B*-Trees        
+    Prefix B*-Trees     
+    Virtual B-Trees     
+    Compression     
+    Variable Length Entries     
+    Binary B-Trees      
+    2-3 Trees and Theoreucal Results        
+4 B-TREES 1N A MULTIUSER ENVIRONMENT        
+    Security        
+5 A GENERAL PURPOSE ACCESS METHOD USING     
+    B*-TREES        
+    Performance Enhancements        
+    Tree-Structured Fde Directory       
+    Other VSAM Facdltms     
+SUMMARY     
+ACKNOWLEDGMENTS     
+REFERENCES      
