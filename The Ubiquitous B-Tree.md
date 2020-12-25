@@ -29,21 +29,70 @@ Operations on a File    操作一个文件
     Insertion and Deletion Costs    插入和删除的开销        
     Sequential  Processing 顺序处理     
 3 B-TREE VARIANTS   B树变体         
-    B*-Trees        
-    B*-Trees        
-    Prefix B*-Trees     
-    Virtual B-Trees     
-    Compression     
-    Variable Length Entries     
-    Binary B-Trees      
-    2-3 Trees and Theoreucal Results        
-4 B-TREES 1N A MULTIUSER ENVIRONMENT        
-    Security        
-5 A GENERAL PURPOSE ACCESS METHOD USING     
-    B*-TREES        
-    Performance Enhancements        
-    Tree-Structured Fde Directory       
-    Other VSAM Facdltms     
-SUMMARY     
-ACKNOWLEDGMENTS     
-REFERENCES      
+    B*-Trees    B*树             
+    B+-Trees    B+树    
+    Prefix B+-Trees     前缀B+树    
+    Virtual B-Trees     虚拟B树         
+    Compression    压缩      
+    Variable Length Entries    可变宽度入口      
+    Binary B-Trees      二叉B树      
+    2-3 Trees and Theoretical Results    2-3树和理论结果    
+4 B-TREES IN A MULTIUSER ENVIRONMENT     B树在多用户环境       
+    Security    安全            
+5 A GENERAL PURPOSE ACCESS METHOD USING    通用访问方法的使用          
+    B+-TREES     B+树    
+    Performance Enhancements      优化性能        
+    Tree-Structured File Directory      树结构文件目录             
+    Other VSAM Facilities     
+SUMMARY     摘要          
+ACKNOWLEDGMENTS     致谢           
+REFERENCES     参考引用      
+
+
+# Introduction
+The secondary storage facilities available on large computer systems allow users to store, update, and recall data from large
+collections of information called files. A computer must retrieve an item and place it in main memory before it can be pro-
+cessed. In order to make good use of the computer resources, one must organize files intelligently, making the retrieval process
+efficient.
+
+The choice of a good file organization depends on the kinds of retrieval to be performed. There are two broad classes of
+retrieval commands which can be illustrated by the following examples:
+Sequential: "From our employee file, prepare a list of all employees names and addresses," and
+Random: "From our employee file, extract the information about employee J. Smith".
+
+We can imagine a filing cabinet with three drawers of folders, one folder for each employee. The drawers might be labeled "A-
+G," "H-R," and "S-Z," while the folders might be labeled with the employees' last names. A sequential request requires the
+searcher to examine the entire file, one folder at a time. On the other hand, a random request implies that the searcher,
+guided by the'~labels on the drawers and folders, need only extract one folder.
+
+Associated with a large, randomly accessed file in a computer system is an index which, like the labels on the drawers and
+folders of the file cabinet, speeds retrieval by directing the searcher to the small part of the file containing the desired item. Fig-
+ure 1 depicts a file and its index. An index may be physically integrated with the file, like the labels on employee folders, or phys-
+ically separate, like the labels on the draw- ers. Usually the index itself is a file. If the index file is large, another index may be
+built on top of it to speed retrieval further, and so on. The resulting hierarchy is similar to the employee file, where the topmost
+index consists of labels on drawers, and the next level of index consists of labels on folders.
+
+Natural hierarchies, like the one formed by considering last names as index entries, do not always produce the best perform-
+ance when used in a computer system. Usually, a unique key is assigned to each item in the file, and all retrieval is requested by
+specifying the key. For example, each employee might be assigned a unique employee number which would identify that
+employee's record. Instead of labeling the drawers of the cabinet "A-G," etc., one would use ranges of employee numbers like
+"0001"-"3000".
+
+Many techniques for organizing a file and its index have been proposed; Knuth [KNuT73] provides a survey of the basics.
+While no single scheme can be optimum for all applications, the technique of organizing a file and its index called the B-tree has
+become widely used. The B-tree is, de facto, the standard organization for indexes in a database system. This paper, intended for
+computer professionals who have heard of B-trees and want some explanation or direction for further reading, compares sev-
+eral variations of the B-tree, especially the B+-tree, showing why it has become popular. It surveys the literature on B-trees in-
+cluding recent papers not mentioned in textbooks. In addition, it discusses a general purpose file access method based on the B-
+tree.
+
+The starting point of our discussion is an internal storage structure called the binary search tree. In particular, we begin with
+balanced binary search trees because of their guaranteed low retrieval cost. For a survey of binary search trees and other
+internal storage mechanisms, the reader is referred to SEVE74 and NIEV74. NIEV74 also explains the graph theoretic terms
+"tree," "node," "edge," "root," "path," and "leaf," which will be used throughout the discussion.  The remainder of this Introduction pre-
+sents a model of the retrieval process and outlines the file operations to be considered.  Section 1 presents the basic B-tree as pro-
+posed by Bayer and McCreight, giving the methods for inserting, deleting, and locating items. Then for each type of operation,
+Section 2 examines the cost and concludes that sequential processing can be expensive. In many cases, changes in implemen-
+tation can lower the costs; Section 3 shows variations of the B-tree which have been developed to do so. Extending the varia-
+tions of B-trees, Section 4 reviews the problems of maintaining a B-tree in a multiple user environment and outlines solutions for
+concurrency and security problems. Finally, Section 5 presents IBM's general purpose file access method which is based on the B-tree.
