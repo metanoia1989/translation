@@ -145,6 +145,9 @@ in which k*i* is called the key for the *i*th record, and a*i* the associated in
 for a record in an employee file might be a five-digit employee number, while the associated information 
 might consist of the employee's name, address, salary, and number of dependents.
 
+由于这篇论文的目的，我们把一个文件看做n条记录的集合，每一个记录用 `ri = (ki, ai)` 表示，其中 ki 是第i条记录的键，ai表示关联的信息。
+例如，一条记录的键可能是职员文件中的五位数职员号码，而关联的信息可能是由职员姓名、地址、薪水和职员编号组成的。
+
 We assume that key k*i* uniquely identifies record r*i*. Furthermore, we assume that although the key is much 
 shorter than the associated information, the set of all keys is too large to fit into main memory. These
 assumptions imply that if records are to be retrieved randomly using the keys, it would be advantageous to 
@@ -152,14 +155,25 @@ construct an index to speed retrieval. Since the set of all keys does not fit in
 itself must be external. Finally, we assume that the keys have a natural order, say alphabetical, so we can 
 refer to the keysequence order of a file.
 
+我们假设键 ki 是记录 ri 的唯一标识符。此外，我们假设尽管这些键比关联的信息更短，但是所有键的集合是非常巨大的，会填满整个内存。
+我们假定这些记录使用键来进行随机访问，使用索引的优点是提高检索速度。一开始所有键的集合并不会填满内存，但是这些索引一定会扩展。
+最终，我们假设这些键有一个自然的顺序，叫做字母顺序，所以我们能引用关键序列的文件。           
+
 Users conduct transactions against a file, inserting, deleting, retrieving, and updating records. In 
 additions, users frequently process the file sequentially, in key-sequence order, starting at a given point. 
 Most often, that starting point is the beginning of the file. A set of basic operations which support
 such transactions are:
-insert: add a new record, (ki, ai), checking that k, is unique,      
-delete: remove record (ki, a1) given k,,     
-find: retrieve a~i+1 given ki,     
-next: retrieve a~i+1 given that a, was just retrieved (i.e., process the file sequentially).
+insert: add a new record, (ki, ai), checking that ki, is unique,      
+delete: remove record (ki, ai) given ki,     
+find: retrieve ai given ki,     
+next: retrieve a~i+1 given that ai, was just retrieved (i.e., process the file sequentially).
+
+用户对文件进行组织事务，插入、删除、检索和更新记录。更多的，用户频繁处理文件排序，通过键排序，给一个开始的指针。
+常常地，这个起点是文件的开始。一个基础操作的集合支持如下的事务：
+插入：添加一个新的记录，(ki, ai)，检测这个k是唯一的。
+删除：通过给的键ki移除记录(ki, ai)
+查找：通过给的键ki检索值ai
+下一个：根据给的文件ai检索下一个a~i+1（顺序地处理文件序列）
 
 For a given file organization, there are costs associated with maintaining the index and with performing 
 each of these operations. Since the index is intended to speed retrieval, processing time is usually taken
@@ -170,3 +184,8 @@ related to the number of reads. Therefore, the number of secondary storage acces
 cost measure for evaluating index methods.  Other less important costs include the time to process data 
 once it has been placed in main memory, the secondary storage space utilization, and the ratio of the space 
 required by the index to the space required by the associated information.
+
+为了给出文件架构，这些维持索引的关联和执行每一种操作是有开销的。一开始所以是为了提高检索速度的，处理时间是主要的开销衡量标注。
+关于当前的硬件技术，这个时间取决于访问辅助存储设备，其请求处理数据的时间是主要的组成部分。而且，很多随机访问设备传输数据是
+一个固定数量的读取操作数据量，所以总共的时间取决于读取数据的数量成线性比。因为，辅助存储设备访问服务的次数作为估计索引开销的衡量标准。
+其他少数有重要开销的包括处理数据一次性放入主存的操作时间，辅助存储空间的利用，通过分配信息索引到空间来伸缩空间。
