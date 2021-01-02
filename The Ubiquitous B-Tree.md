@@ -1,3 +1,6 @@
+这篇论文篇幅太长，很多长难句，如果粗糙地忽略过就达不到训练自己的目的，精准地达成目的才是我要的。    
+所以先粗略地翻译一遍，然后第二篇来审校，确定哪些句子有问题。
+
 # The Ubiquitous B-Tree 无处不在的B树
 Author: Douglas Comer       
 Computer Sctence Department, Purdue Untverstty, West Lafayette, Indiana 47907
@@ -187,5 +190,90 @@ required by the index to the space required by the associated information.
 
 为了给出文件架构，这些维持索引的关联和执行每一种操作是有开销的。一开始所以是为了提高检索速度的，处理时间是主要的开销衡量标注。
 关于当前的硬件技术，这个时间取决于访问辅助存储设备，其请求处理数据的时间是主要的组成部分。而且，很多随机访问设备传输数据是
-一个固定数量的读取操作数据量，所以总共的时间取决于读取数据的数量成线性比。因为，辅助存储设备访问服务的次数作为估计索引开销的衡量标准。
-其他少数有重要开销的包括处理数据一次性放入主存的操作时间，辅助存储空间的利用，通过分配信息索引到空间来伸缩空间。
+一个固定数量的读取操作数据量，所以总共的时间取决于读取数据的数量成线性比。因此，二级存储访问的次数可以作为评价指标方法的一个合理的成本度量。其他少数有重要开销的包括处理数据一次性放入主存的操作时间，辅助存储空间的利用，通过分配信息索引到空间来伸缩空间。
+
+# 1. THE BASIC B-TREE 基础的B树
+The B-tree has a short but important history. In the late 1960s computer manufacturers and independent 
+research groups competitively developed general purpose file systems and so-called "access methods"
+for their machines. At Sperry Univac Corporation (in conjunction with Case Western Reserve University) 
+H. Chiat, M. Schwartz, and others developed and implemented a system which carried out insert and find
+operations in a manner related to the B- tree method which we will describe shortly. Independently, 
+B. Cole, S. Radcliffe, M.  Kaufman, and others developed a similar system at Control Data Corporation (in
+conjunction with Stanford University). R.  Bayer and E. McCreight, then at Boeing Scientific Research Labs, 
+proposed an external index mechanism with relatively low cost for most of the operations defined in
+the previous section; they called it a B-tree ~ [BAYE72].
+
+B树有一个简短还是很重要的历史。在1960年代之前计算机制造商和相关的研究组织为了他们的机器竞相开发出叫做“access methods”
+的通用文件系统。在Sperry Univac公司（与西储大学一起）的H. Chiat、M. Schwartz 和其他人开发并实现了一个系统，完成了
+与B树相关的插入和查找操作，我们将简短地描述它。另外的，B. Cole、S.Radcliffe、M. kaufman 和其他人在Control Data公司
+（与斯坦福大学一起）开发了一个类似的系统。那个时候，R. Bayer和E. McCreight在Boeing科学研究实验室，提议一个关于上一部分
+定义的常用操作的低开销的扩展索引机制。他们都叫做B树。
+
+PS: 欧美那边真是人才济济啊，各个大学和大公司，都有一流的人才。
+
+This section presents the basic B-tree data structure and maintenance algorithms as a generalization of 
+the binary search tree in which more than two paths leave a given node; the next section discusses costs 
+for each operation. Other general introductions may be found in HORO76, KNuT73, and WIRT76.
+    
+这个部分将描述基础的B树数据结构和维持算法，维持一般化的二叉搜索树，其一个节点有比两个更多的路径叶子。下一部分讨论
+每个操作的开销。其他关于B树的一般介绍可以在 HORO76、KNuT73 和 WIRT76 中找到。
+
+Recall that in a binary search tree the branch taken at a node depends on the outcome of a comparison of 
+the query key and the key stored at the node. If the query is less than the stored key, the left branch
+is taken; if it is greater, the right branch is followed. Figure 2 shows part of such a tree used to store 
+employee numbers, and the path taken for the query "15."
+
+回想一下，在一个二叉搜索树种，获取分支的一个节点，取决于查询的键与存储的键的比较结果。如果查询的比存储的键更小，
+做分支将会获取；如果查询的比存储的键更大，右分支将被选择。图二展示了一个部分，这个树使用职员号码作为存储的值，
+而且查询的值是“15”。
+
+![Figure02 Part of a binary search tree for employee numbers The path taken for query "15" is darkened.](./images/btree/figure02.png)
+
+Now consider Figure 3 which shows a modified search tree with two keys stored in each node. Searching 
+proceeds by choosing one of three paths at each node. In the figure, the query, 15, is less than 42 
+so the leftmost would be taken at the root. For those queries between 42 and 81 the center
+path would be selected, while the rightmost path would be followed for queries greater than 81. The 
+decision procedure is repeated at each node until an exact match occurs (success) or a leaf is encountered 
+(failure).
+
+现在考虑一下展示图3的情况，修改一个每个节点存储两个键的二叉搜索树。搜索处理将在每个节点的三个路径中选择一个。在示图中，
+查询的是15，比42更小，所以将会从根节点的左侧子树获取。为了那些在42和81之间的查询，将会选中中间的子树。当查询的值大于81时，
+右侧路径将会被选择。这个选择程序将会在每个节点上重复进行，直到提取匹配发生（成功）或者到了叶子节点（失败）。
+
+![FIGURE 3. A search tree with 2 keys and 3 branches per node. The path taken for query "15" is darkened.](./images/btree/figure03.png)
+
+In general, each node in a B-tree of order d contains at most 2d keys and 2d + 1 pointers, as shown in 
+Figure 4. Actually, the number of keys may vary from node to node, but each must have at least d keys
+and d + 1 pointers. As a result, each node is at least 1/2 full. In the usual implementation a node 
+forms one record of the index file, has a fixed length capable of accommodating 2d keys and 2d pointers, 
+and contains additional information telling how many keys correctly reside in the node.
+
+一般情况下，在度为d的B树中，每个节点最有2d个键和2d+1个指针，展示在示图4中。事实上，键的数量可能会受到节点到节点的影响，
+但是每个节点必须有至少d个键和d+1个指针。所以，每个节点至少是1/2满的。一个通常的实现中，一个节点由文件索引的记录组成，
+有假设为2d个键和2d个指针的固定长度的容量，而且包含了有多少个键正确放置在节点中的扩展信息。
+
+Usually, large, multikey nodes cannot be kept in main memory and require an access to secondary storage 
+each time they are to be inspected. Later, we will see how, under our cost criterion, maintaining more than
+one key per node lowers the cost of find, insert, and delete operations.
+
+通常，巨大的、很多件的节点无法保存在主存中，需要一个能够访问的辅助存储设备，随时能够进行检查。之后，我们将能看到如何
+在我们的开销标准下，维持不止一个键的节点进行查找、插入、删除操作保持很小的开销。
+
+
+## Balancing 平衡
+The beauty of B-trees lies in the methods for inserting and deleting records that always leave the tree 
+balanced. As in the case of binary search trees, random insertions of records into a file can leave a tree 
+unbalanced. While an unbalanced tree, like the one shown in Figure 5a has some long paths and some short 
+ones, a balanced tree, like the one shown in Figure 5b, has all leaves at the same depth. Intuitively, 
+B-trees have a shape as shown in Figure 6. The longest path in a B-tree of n keys contains at most
+about logdn nodes, d being the order of the B-tree. A find operation may visit n nodes
+
+in an unbalanced tree indexing a file of n records, but it never visits more than 1 + logdn nodes in a 
+B-tree of order d for such a file. Because each visit requires a secondary storage access, balancing 
+the tree has large potential savings. Many schemes to balance trees have been proposed (see NIEV74, 
+FOST65, KARL76 for examples).  Each scheme requires some computation time to perform the balancing, 
+so the savings during retrieval operations must be greater than the cost of balancing itself.  The B-tree 
+balancing scheme restricts changes in the tree to a single path from a leaf to the root, so it cannot 
+introduce "runaway" overhead. Furthermore, the balancing mechanism uses extra storage to lower the 
+balancing costs (presumably, secondary storage is inexpensive compared to retrieval time). Hence, B-trees 
+gain the. advantages.. of balanced tree schemes while avmdmg some of the time-consuming maintenance.
