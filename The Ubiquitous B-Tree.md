@@ -282,7 +282,8 @@ gain the. advantages.. of balanced tree schemes while avmdmg some of the time-co
 当一个不平衡的树，像图5b展示的那样，所有的叶都有同样的深度。很自然的，B树有一个形状像示图6展示的那样。在B树中
 最长的路径有着n个键，包含最多logdn个节点，b表示B树的度。在有n条记录的文件中，索引是一个不平衡的树，一个查找操作
 可能经过n个节点。在度为d的B树结构的索引文件中，其搜索经过的次数不会比 logdn+1 多。很多平衡树的计划被提议，像
-NIEV74、FOST65、KARL76等。 
+NIEV74、FOST65、KARL76等。 每个设计都被要求一些计算时间来执行平衡，例如保存在检索操作必须大于平衡操作的开销。
+B树平衡设计限制改变B树
 
 ![FIGURE 5. (a) An unbalanced tree with many long paths, and (b) a balanced tree with all paths to leaves exactly the same length.](./images/btree/figure05.png)
 
