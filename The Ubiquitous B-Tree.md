@@ -252,13 +252,14 @@ and contains additional information telling how many keys correctly reside in th
 但是每个节点必须有至少d个键和d+1个指针。所以，每个节点至少是1/2满的。一个通常的实现中，一个节点由文件索引的记录组成，
 有假设为2d个键和2d个指针的固定长度的容量，而且包含了有多少个键正确放置在节点中的扩展信息。
 
+![FIGURE 4. A node in a B-tree of order d with 2d keys and 2d + 1 pointers.](./images/btree/figure04.png)
+
 Usually, large, multikey nodes cannot be kept in main memory and require an access to secondary storage 
 each time they are to be inspected. Later, we will see how, under our cost criterion, maintaining more than
 one key per node lowers the cost of find, insert, and delete operations.
 
 通常，巨大的、很多件的节点无法保存在主存中，需要一个能够访问的辅助存储设备，随时能够进行检查。之后，我们将能看到如何
 在我们的开销标准下，维持不止一个键的节点进行查找、插入、删除操作保持很小的开销。
-
 
 ## Balancing 平衡
 The beauty of B-trees lies in the methods for inserting and deleting records that always leave the tree 
@@ -267,7 +268,6 @@ unbalanced. While an unbalanced tree, like the one shown in Figure 5a has some l
 ones, a balanced tree, like the one shown in Figure 5b, has all leaves at the same depth. Intuitively, 
 B-trees have a shape as shown in Figure 6. The longest path in a B-tree of n keys contains at most
 about logdn nodes, d being the order of the B-tree. A find operation may visit n nodes
-
 in an unbalanced tree indexing a file of n records, but it never visits more than 1 + logdn nodes in a 
 B-tree of order d for such a file. Because each visit requires a secondary storage access, balancing 
 the tree has large potential savings. Many schemes to balance trees have been proposed (see NIEV74, 
@@ -277,3 +277,15 @@ balancing scheme restricts changes in the tree to a single path from a leaf to t
 introduce "runaway" overhead. Furthermore, the balancing mechanism uses extra storage to lower the 
 balancing costs (presumably, secondary storage is inexpensive compared to retrieval time). Hence, B-trees 
 gain the. advantages.. of balanced tree schemes while avmdmg some of the time-consuming maintenance.
+
+完美的B树存在插入和删除记录的方式时失去平衡。作为二叉搜索树的一种，随机插入记录到一个文件中能使树变得不平衡。
+当一个不平衡的树，像图5b展示的那样，所有的叶都有同样的深度。很自然的，B树有一个形状像示图6展示的那样。在B树中
+最长的路径有着n个键，包含最多logdn个节点，b表示B树的度。在有n条记录的文件中，索引是一个不平衡的树，一个查找操作
+可能经过n个节点。在度为d的B树结构的索引文件中，其搜索经过的次数不会比 logdn+1 多。很多平衡树的计划被提议，像
+NIEV74、FOST65、KARL76等。 
+
+![FIGURE 5. (a) An unbalanced tree with many long paths, and (b) a balanced tree with all paths to leaves exactly the same length.](./images/btree/figure05.png)
+
+![FIGURE 6. The shape of a B-tree of order d indexing a file of n records.](./images/btree/figure06.png)
+
+
