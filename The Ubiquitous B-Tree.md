@@ -276,17 +276,82 @@ so the savings during retrieval operations must be greater than the cost of bala
 balancing scheme restricts changes in the tree to a single path from a leaf to the root, so it cannot 
 introduce "runaway" overhead. Furthermore, the balancing mechanism uses extra storage to lower the 
 balancing costs (presumably, secondary storage is inexpensive compared to retrieval time). Hence, B-trees 
-gain the. advantages.. of balanced tree schemes while avmdmg some of the time-consuming maintenance.
+gain the advantages of balanced tree schemes while avoiding some of the time-consuming maintenance.
 
 完美的B树存在插入和删除记录的方式时失去平衡。作为二叉搜索树的一种，随机插入记录到一个文件中能使树变得不平衡。
 当一个不平衡的树，像图5b展示的那样，所有的叶都有同样的深度。很自然的，B树有一个形状像示图6展示的那样。在B树中
 最长的路径有着n个键，包含最多logdn个节点，b表示B树的度。在有n条记录的文件中，索引是一个不平衡的树，一个查找操作
-可能经过n个节点。在度为d的B树结构的索引文件中，其搜索经过的次数不会比 logdn+1 多。很多平衡树的计划被提议，像
-NIEV74、FOST65、KARL76等。 每个设计都被要求一些计算时间来执行平衡，例如保存在检索操作必须大于平衡操作的开销。
-B树平衡设计限制改变B树
+可能经过n个节点。在度为d的B树结构的索引文件中，其搜索经过的次数不会比 logdn+1 多。很多平衡树的方案被提出了，像
+NIEV74、FOST65、KARL76等。 每个方案都被要求一些计算时间来执行平衡，例如保存在检索操作必须大于平衡操作的开销。
+B树平衡方案限制改变B树成为一条从叶子到根的单一路径，所以它不能失控地直接到顶。此外，这个平衡机制使用扩展的存储来
+降低平衡的开销（大概，比起检索时间来说辅助存储设备是廉价的）。所以，B树获得平衡树方案的优势，通过避免一些耗费时间的机制。   
 
 ![FIGURE 5. (a) An unbalanced tree with many long paths, and (b) a balanced tree with all paths to leaves exactly the same length.](./images/btree/figure05.png)
 
 ![FIGURE 6. The shape of a B-tree of order d indexing a file of n records.](./images/btree/figure06.png)
 
 
+
+## Insertion
+To see how balance is maintained during insertion, consider Figure 7a which shows a B-tree of order 2. 
+Since each node in a B-tree of order d contains between d and 2d keys, each node in the example has 
+between 2 and 4 keys. Some indicator which is not depicted must be present in each node to mark the 
+current number of keys. Insertion of a new key requires a two-step process.  First, a find proceeds 
+from the root to locate the proper leaf for insertion. Then the insertion is performed, and balance 
+is restored by a procedure which moves from the leaf back toward the root. Referring to Figure 7a, 
+one can see that when inserting the key "57" the find terminates unsuccessfully at the fourth leaf. 
+Since the leaf can accommodate another key, the new key is simply inserted, yielding the tree shown in
+Figure 7b. If the key "72" were inserted, however, complications would arise because the appropriate 
+leaf is already full.  Whenever a key needs to be inserted in a node that is already full, a split occurs: 
+the node is divided as shown in Figure 8. Of the 2d + 1 keys, the smallest d are placed in one node, 
+the largest d are placed in another node, and the remaining value is promoted to the parent node where 
+it serves as a separator. Usually the parent node will accommodate an additional key and the insertion 
+process terminates. If the parent node happens to be full too, then the same splitting process is applied 
+again. In the worst case, splitting propagates all the way to the root and the tree increases in height
+by one level. In fact, a B-tree only increases in height because of a split at the root.
+
+来看看怎么在插入的时候维护平衡，参见示图7a中度为2的B树。在度为d的B树中，每个节点包含了d到2d之间的键，每个节点在示例中
+有2到4个键。一些指示器没有描述但是必须表示每个节点标记的当前键的数量。插入一个新的键，要求两个处理步骤。首先，找到一个
+从根节点前进定位合适的叶子节点来插入。然后执行插入，通过移动叶子向根节点的步骤来恢复平衡。引用示图7a，一个能看到的示例，
+插入键57时，在第4叶子上找到不成功的结束。一开始叶子节点能够容纳另一个键，新的键是可以简单地插入，很符合的树展示在示图7b。
+如果键72插入了，然而，产生了一个复杂的问题，因为这个合适的叶子已经满了。无论如何，当一个键需要插入一个节点，而它已经满
+的时候，一个分割发生了；这个节点被分割，如示图8所示。2d+1个键，小于d的放在一个节点中，大于d的放在另一个节点中，作为分割符
+的剩余的值提升到父节点中。通常这个父节点将提供扩展的键容纳位置，然后插入过程结束。如果父节点也发生满了的情况，那时再进行一次
+一样的分割处理操作。在最糟糕的情况中，分割操作蔓延所有的路径直到根节点，并且树的高度会递增一层。实际上，B树仅仅在根节点分割时
+递增高度。
+
+
+![FIGURE 7. (a) A B-tree of order 2, and (b) the same tree after insertion of key "57". Note that the number of keys m the root node may be less than d, the order of the B-tree All other nodes have at least d keys in them.](./images/btree/figure07.png)
+
+![FIGURE 8. (a) a leaf and its ancestor in a B-tree, and (b) the same subtree after insertion of key "72".  Each node retains between 2 and 4 keys (d and 2d ).](./images/btree/figure08.png)
+
+## Deletion
+Deletion in a B-tree also requires a find operation to locate the proper node. There are then two 
+possibilities: the key to be deleted resides in a leaf, or the key resides in a nonleaf node. A nonleaf 
+deletion requires that an adjacent key be found and swapped into the vacated position so that it finds 
+work correctly. To locate an adjacent key in key-sequence order, one merely searches for the leftmost 
+leaf in the right subtree of the now empty slot. As in a binary search tree, the needed value always
+resides in a leaf. Figure 9 demonstrates these relationships.  
+
+Once the empty slot has been "moved" to a leaf, we must check to see that at least d keys remain. If 
+less than d keys occupy the leaf, then an underflow is said to occur, and redistribution of the keys 
+becomes necessary. To restore balance (and the B-tree property that each node has at least d keys) only 
+one key is needed--it could be obtained by borrowing from a neighboring leaf. But since the operation 
+requires at least two accesses to secondary storage, a better redistribution would evenly divide the 
+remaining keys between the two neighboring nodes, lowering the cost of successive deletions from the 
+same node. Redistribution is illustrated by Figure 10.  
+
+Of course, the distribution of keys among two neighbors will suffice only if there are at 
+least 2d keys to distribute. When less than 2d values remain, a concatenation must occur. During a concatenation, 
+the keys are simply combined into one of the nodes, and the other is discarded (note that concatenation is 
+the inverse of splitting).  Since only one node remains, the key separating the two nodes in the ancestor 
+is no longer necessary; it too is added to the single remaining leaf. Figure 11 shows an example of 
+concatenation and the final location of the separator key.  
+
+When some node loses a separator key due to concatenation of two of its children, it too may underflow 
+and require redistribution from one of its neighbors.  The process of concatenating may force concatenating 
+at the next higher level, and so on, to the root level.  Finally, if the descendants of the root are 
+concatenated, they form a new root, decreasing the height of the B-tree by 1.
+
+Algorithms for insertion and deletion may be found in BAYE72. Simple examples programmed in PASCAL are provided by
+Wirth [WIRT76].
