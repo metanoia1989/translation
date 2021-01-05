@@ -22,3 +22,9 @@ Modern B-Tree Techniques https://w6113.github.io/files/papers/btreesurvey-graefe
 这里有三篇B-Tree的文章教程，可以翻译出来，然后图片可以自己处理，整篇翻译，即理解了B-Tree结构，也能训练自己的英文。  
 
 篇幅比较长的论文就采取一段英文一段翻译的方式进行，这样方便对照。    
+
+
+# Write an Email in English
+写英文邮件
+
+How to Write an Email in English: 18 Office-ready Email Writing Tips (With Sample Emails) https://www.fluentu.com/blog/english/how-to-write-an-email-in-english/    
