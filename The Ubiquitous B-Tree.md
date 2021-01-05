@@ -317,8 +317,8 @@ by one level. In fact, a B-tree only increases in height because of a split at t
 如果键72插入了，然而，产生了一个复杂的问题，因为这个合适的叶子已经满了。无论如何，当一个键需要插入一个节点，而它已经满
 的时候，一个分割发生了；这个节点被分割，如示图8所示。2d+1个键，小于d的放在一个节点中，大于d的放在另一个节点中，作为分割符
 的剩余的值提升到父节点中。通常这个父节点将提供扩展的键容纳位置，然后插入过程结束。如果父节点也发生满了的情况，那时再进行一次
-一样的分割处理操作。在最糟糕的情况中，分割操作蔓延所有的路径直到根节点，并且树的高度会递增一层。实际上，B树仅仅在根节点分割时
-递增高度。
+一样的分割处理操作。在最糟糕的情况中，分割操作蔓延所有的路径直到根节点，并且树的高度会递增一层。实际上，因为分割B树的
+根节点，所以会增加高度。
 
 
 ![FIGURE 7. (a) A B-tree of order 2, and (b) the same tree after insertion of key "57". Note that the number of keys m the root node may be less than d, the order of the B-tree All other nodes have at least d keys in them.](./images/btree/figure07.png)
@@ -333,6 +333,12 @@ work correctly. To locate an adjacent key in key-sequence order, one merely sear
 leaf in the right subtree of the now empty slot. As in a binary search tree, the needed value always
 resides in a leaf. Figure 9 demonstrates these relationships.  
 
+在B树中，删除要求先进行查找操作定位到合适的节点。这里有两种可能性：删除的键位于叶子节点上，或者键位于非叶子节点上。
+非叶子节点的删除要求一个邻接的键找到并且进入空出的位置，以便达到正确地工作。定位有序的键序列上的邻接键，在不是空槽的右侧
+子树上仅搜索一次最左侧的叶子节点。作为一个二叉搜索树，这个需要的值总是在叶子节点上。
+
+![FIGUR~ 9. Deletion of key "17" requires that the next sequential key, "21" be found and swapped into the vacant position. The next sequential key always resides in the leftmost leaf of the subtree given by the right pointer of the empty position.](./images/btree/figure09.png)
+
 Once the empty slot has been "moved" to a leaf, we must check to see that at least d keys remain. If 
 less than d keys occupy the leaf, then an underflow is said to occur, and redistribution of the keys 
 becomes necessary. To restore balance (and the B-tree property that each node has at least d keys) only 
@@ -340,6 +346,13 @@ one key is needed--it could be obtained by borrowing from a neighboring leaf. Bu
 requires at least two accesses to secondary storage, a better redistribution would evenly divide the 
 remaining keys between the two neighboring nodes, lowering the cost of successive deletions from the 
 same node. Redistribution is illustrated by Figure 10.  
+
+空槽一次性地移动到叶子节点上，我们必须检查看看最少的d个键是否能够保持。如果这个叶子发生了少于d个键的情况，这是
+下溢的情况发生，并且重新分配键成为了必须要做的。要达到恢复平衡（B树的属性：每个节点至少有d个键）仅仅需要一个键时，
+它能获得从相邻的叶子借来的键。但是开始这个操作要求至少两次访问辅助存储设备，一个更好的重新分配方法是在两个相邻的节点
+均匀地分割剩余的键，从同一个节点上进行连续删除操作的开销是很低的。重新分配的插图参见示图10。
+
+![FIGURE 10. (a) Part of a B-tree before, and (b) after redistribution of keys among two neighbors. Note the final position of the separator key, "50". Redistribution into equal size nodes helps avoid underflow on successive deletions.](./images/btree/figure10.png)
 
 Of course, the distribution of keys among two neighbors will suffice only if there are at 
 least 2d keys to distribute. When less than 2d values remain, a concatenation must occur. During a concatenation, 
