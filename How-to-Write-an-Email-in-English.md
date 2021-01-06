@@ -21,54 +21,90 @@ Ready? Let’s start writing emails in English!
 
 这就是为什么写作能力是重要的，简洁的英文邮件是非常重要的技能。它能帮助你得到工作，获得朋友，进入大学或者更多。    
 如果你是第一次用英文来写邮件，看看我们的新手指南。  
-你能够
+
+然后，为了关于写邮件和邮件文化的有用技巧，请继续阅读这篇文章。
+你将获得充裕的用英文写邮件的格式，并且你将看完用英文写邮件的不同的完整的例子。
+准备好了吗？让我们开始用英文写邮件吧。
 
 General Tips for How to Write an Email in English
 -------------------------------------------------
 
-### **1. Be sure an email is necessary**
+### **1. Be sure an email is necessary** 确认需要一封邮件
 
 Like most of the email writing tips in this section, this may seem obvious. But sometimes we forget obvious things.
 
+在这个部分，像很多写邮件的技巧一样，这个提示看起来平淡无奇。但是有时候我们不要忘记这个平淡无奇的事情。
+
 So ask yourself, “Is there a better or faster way to take care of this situation?” Many people get dozens or even hundreds of emails a day, so be sure that email is [the fastest, clearest and most efficient way to communicate in your situation](http://www.businessinsider.com/when-to-email-text-or-call-2014-2).
+
+所以问问你自己，“这件解决方案是最好或者最快的吗？” 很多人一天中收到一打甚至上百封邮件，所以确认你的解决方案中邮件是最快速的、最简洁的并且最有影响力的通信方式。
 
 For example, if you’re writing to a coworker or a friend that you often see, you can probably just talk to him or her in person. Or you could also send a text message or call on the phone.
 
+例如，如果你写给一个同事或者一个朋友然后你会通常会发现，你大概只会谈到他个人。或者你可以选择用手机发送一则短信或者拨打电话。
+
 If you’ve decided that an email is the best option, then check the following tips before you click “Send.”
 
-### 2. Use separate business and personal email addresses
+如果你选择更好的选项邮件，那时检测下列的技巧然后点击发送。
+
+### 2. Use separate business and personal email addresses 使用分开的工作邮件地址和个人邮件地址
 
 This may not apply to everyone, but if you can do it, it can help you in many ways.
 
+这可能并不适用每一个人，但是你能去做它，它在很多方面能帮助到你。
+
 Many jobs automatically give you an email address that you have to use. If that’s the case, then the problem is solved. Use the business email address for work and your personal email address for personal emails.
+
+很多工作会自动给你分配一个邮件地址，然后你不得不使用它。如果有这种情况，那么问题就解决了。工作时使用商业邮件地址，个人邮件使用个人的邮件地址。
 
 If you have a business email address, it can make an email look more professional. That’s good if you’re writing a formal email, but it might not be as nice if you’re writing to a friend. So that’s why having two can be useful.
 
+如果你有一个商业邮件地址，能让邮件看起来更专业。如果你写一封正式的邮件这是很好的，但是如果你写给朋友它可能并不是很好。所以为什么两个邮件地址是有用的。
+
 Also, if you have separate accounts, it can help you balance your personal and professional life.
 
-### 3. Be clear, brief and polite
+并且，如果你有分开的邮箱账号，它能帮助你平衡个人生活和专业工作。
+
+### 3. Be clear, brief and polite 清楚的，简洁的，有礼貌的
 
 Again, many people receive so many emails each day. If your email is confusing, angry or really long, the recipient may not respond right away. Eventually they may forget to answer or even just delete it.
 
+再一次，很多人每天都收到很多邮件。如果你的邮件是难以理解的、愤怒的，或者真的很长的话，收信人很可能不会正确地回应。甚至他们可能会忘记回应或者删除掉。
+
 So be sure to get to the point quickly, but not in a rude way.
+
+所以确认很快地获取到重点，并且不是以粗暴无礼的方式。
 
 Treat an email [similarly to an essay](https://www.fluentu.com/english/blog/english-essay-tips/), only much shorter, and you will probably have good results. In an essay, you have to introduce the topic, explain the different points and then conclude the topic.
 
+看待邮件类似写散文，只需要很短，并且你将很可能得到好的结果。在散文中，你需要介绍主题，描述不同的关键点和对主题的深入推断。
+
 Honestly, this is something I have difficulty doing myself. I’m not (usually) rude in email, but I do have problems with the “brief” part. So when I’m done writing an email, I check it and try to eliminate about 20% of the content, since it was probably unnecessary.
 
-### 4. Don’t write emails when you’re angry
+真诚地来说，这是我很难做到的事情。我能在邮件里不表现地很粗鲁无礼，但是我还有一个问题，就是关于简短的这个部分。所以当我写完一封邮件，我会检查它然后试图缩略20%的内容，在一开始这可能不需必须的。
+
+### 4. Don’t write emails when you’re angry 当你愤怒的时候不要写邮件。
 
 It can be very tempting to write a mean email when you’re frustrated or angry at something. But it’s not worth it.
 
+当你失意或愤怒的时候，写有目的的邮件是非常诱人的。但是这种行为是没有价值的。
+
 If you’re angry, wait until you’ve calmed down before writing your email. It’s better to wait a day than to lose a job or destroy a friendship because you said something stupid when you were angry.
 
-### 5. Use short sentences
+如果你是愤怒的，等到你冷静下来后再来写邮件。等待一天比丢失工作或者摧毁友谊要好的多，因为你愤怒的时候会说一些愚蠢透顶的话。
+
+### 5. Use short sentences 使用简短的句子
 
 Like #3, this is a problem that I have myself. I like to write long, complicated sentences, but often those are very confusing for the reader. That’s especially true if the reader is not a native English speaker.
 
+像技巧3一样，这是我很难做到的事。我喜欢写很长、结构复杂的句子，但是经常让读者难以理解。如果读者不是以英语为母语，这一点尤其重要。
+
 I teach English in Costa Rica, and in Spanish it seems to be more common to have really long sentences with many commas. That’s very confusing, especially if you translate those ideas into English.
 
+我在Costa Rica教授英语，并且那里的西班牙语好像普遍是有着很多标点的长句。那非常让人困惑，特别是当你想把它翻译成英文的时候。
+
 So here’s a tip: Write short sentences. It’s not bad style in English if you write short, clear sentences. Some authors, like Ernest Hemingway, are famous for doing it. (There’s even [an online tool called Hemingway App](http://www.hemingwayapp.com/) that can help you write more like him!)
+
 
 If you’re very comfortable writing in English, you can use long, more complicated sentences. But then again, if you’re very comfortable writing in English, then you probably don’t need these email writing tips!
 
