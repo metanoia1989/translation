@@ -359,12 +359,57 @@ least 2d keys to distribute. When less than 2d values remain, a concatenation mu
 the keys are simply combined into one of the nodes, and the other is discarded (note that concatenation is 
 the inverse of splitting).  Since only one node remains, the key separating the two nodes in the ancestor 
 is no longer necessary; it too is added to the single remaining leaf. Figure 11 shows an example of 
-concatenation and the final location of the separator key.  
+concatenation and the final location of the separator key. 
+
+当然，只有在至少有2d键可供分配的情况下，在两个邻居之间分配键才足够。 当剩余的少于2d个值时，会发生串联。在这串联的情况下，
+这些键简单地混合在一个节点中，并且其他的将会被丢弃（注意那个关联的将会被分割逆转）。因为只剩下一个节点，所以不再需要祖先
+节点中分割为两个节点的键；它会被添加到剩余的单个叶子节点中。示图11展示了这个例子，串联和最终定位到的作为分割的键。
+
+![FIGURE 11. (a) A deletion causing concatenation, and (b) the rebalanced tree.](./images/btree/figure11.png)
 
 When some node loses a separator key due to concatenation of two of its children, it too may underflow 
 and require redistribution from one of its neighbors.  The process of concatenating may force concatenating 
 at the next higher level, and so on, to the root level.  Finally, if the descendants of the root are 
 concatenated, they form a new root, decreasing the height of the B-tree by 1.
 
+当一些节点串联它的两个子节点时会丢失分割的键，它也可能下溢并且要求再分配到它的邻居节点。处理串联可能会在更高的层级强制串联，
+并且直到根节点。最终，如果根节点的后代也串联了，他们会成为新的根节点，B数的高度减去1。
+
 Algorithms for insertion and deletion may be found in BAYE72. Simple examples programmed in PASCAL are provided by
 Wirth [WIRT76].
+
+插入和删除的算法能够在论文 BAYE72 中找到。简单的PASCAL编程示例在论文 WIRT76中提供了。   
+
+# 2. THE COST OF OPERATIONS
+Since visiting a node in a B-tree requires an access to secondary storage, the number of nodes visited 
+during an operation provides a measure of its cost. Bayer and McCreight [BAYE72] give a precise analysis 
+of the costs of insertion, deletion, and retrieval. They also provide comprehensive experimental results 
+which relate the theoretical bounds to actual devices. Knuth [KNUT73] also derives bounds for the cost 
+of operations in a B-tree using a slightly different definition. The next section gives a simple explanation 
+of the asymptotic bound on costs.
+
+因为查看B树中的一个节点要求访问辅助存储设备，访问一定数量节点的操作提供了开销的衡量标准。Bayer 和 McCreight 给了一个
+关于插入、删除和检索的开销的清晰分析。他们也提供了在于理论相关的真实设备上的广泛的实验结果。Knuth 也得到了关于定义
+稍微不同的B树的操作开销。下一个章节将提供渐进关联开销的简单描述。   
+
+## Retrieval Costs
+
+First, consider the cost of a find operation.  Except for the root, each node in the B-tree has at least 
+d direct descendants since there are between d and 2d keys per node; the root has at least 2 descendants. 
+So the number of nodes at depths^2 0, 1, 2, ..., must be at least 2, 2d, 2d^2, 2d^3 .... All leaves lie at 
+the same depth h so there are [formula01] nodes with at least d keys each. The height of a tree with n total 
+keys is therefore constrained so that `2d(d^h - 1)/(d - 1) <= n` with a little work one can show that
+`2d^h <= n + 1`, or h <= logd((n+1)/2). Thus, the cost of processing a find operation grows as the logarithm 
+of the file size.
+
+![formula01](./images/btree/formula01.png)
+
+Table I shows how reasonable logarithmic cost can be, even for large fries. A B-tree of order 50 which 
+indexes a file of one million records can be searched with only 4 disk accesses in the worst case. Later we
+will see that this estimate is too high; simple implementation techniques lower the worst case cost to 3, 
+and the average cost to less.
+
+[AHO74] provide another perspective on the cost of finds in a B-tree. They show that for the decision-tree 
+model of computation, one where searching is based on comparison at each node, no asymptotically faster 
+retrieval algorithm can be devised. Of course, this model does rule out some methods, such as hashing
+[MAUE75]. Nevertheless, B-trees exhibit low retrieval costs in both a practical and theoretical sense.
