@@ -402,6 +402,10 @@ keys is therefore constrained so that `2d(d^h - 1)/(d - 1) <= n` with a little w
 `2d^h <= n + 1`, or h <= logd((n+1)/2). Thus, the cost of processing a find operation grows as the logarithm 
 of the file size.
 
+首先，考虑一下查找操作的开销。除了根节点，每个节点在B树中至少有d个直接后代，因为每个节点都有d到2d个键；根节点至少有
+两个直接后代。所以节点的数目是深度的2次方，0、1、2等，必须有至少 2、2d、2d^2、2d^3。所有的叶子节点位于同样的高度h，
+这个高度的树总共有n个键，因此限制。。。。。太难了额。。。。  因此，处理查找操作的开销是随着文件大小对数增长的。
+
 ![formula01](./images/btree/formula01.png)
 
 Table I shows how reasonable logarithmic cost can be, even for large fries. A B-tree of order 50 which 
@@ -409,7 +413,62 @@ indexes a file of one million records can be searched with only 4 disk accesses 
 will see that this estimate is too high; simple implementation techniques lower the worst case cost to 3, 
 and the average cost to less.
 
+表I展示了合理的对数开销，甚至更大。度为50的B树，索引文件将有一百万条记录，在最糟糕的情况下只需要4次访问。随后我们来
+看看这个树估计有多高；简单地实现技术在最糟的情况下是3，而平均开销会更小。
+
 [AHO74] provide another perspective on the cost of finds in a B-tree. They show that for the decision-tree 
 model of computation, one where searching is based on comparison at each node, no asymptotically faster 
 retrieval algorithm can be devised. Of course, this model does rule out some methods, such as hashing
 [MAUE75]. Nevertheless, B-trees exhibit low retrieval costs in both a practical and theoretical sense.
+
+AH074 提供了又一个关于B树查找开销的观点。他们展示了决定树计算模型，一次基于比较每个节点的搜索，没有接近更快的检索
+算法被发明。当然，这个模型用一些方法定义了规则，例如散列法。尽管如此，在实践和理论中，B树都表现出很低的检索开销。
+
+## Insertion and Deletion Costs 插入和删除的开销
+
+An insert or delete operation may require additional secondary storage accesses beyond the cost of a 
+find operation as it progresses back up the tree. Overall, the costs are at most doubled, so the height 
+of the tree still dominates the expressions for these costs. Therefore, in a B-tree of order d for a 
+file of n records, insertion and deletion take time proportional to logdn in the worst case.
+
+当返回树时，插入或删除操作可能要求额外的辅助存储设备访问，会超过查找操作的开销，总体的，开销最多是双倍的，
+所以树的高度仍然制约着开销的表达式。因此，在度为d的B树中一个文件有n条记录，在最糟糕的情况下插入和删除消耗时间比例
+达到logdn。
+
+The advantage of nodes containing a large number of keys should now be clear.  As the branch factor, d, 
+increases, the logarithmic base increases, and the costs of find, insert, and delete operations decrease.
+There are, however, practical limits on the size of a node: most hardware systems bound the amount of 
+data that can be transferred with one access to secondary storage.  Besides, our cost hides the constant 
+factor which grows as the size of data transferred increases. Finally, each device has some fixed track 
+size which must be accommodated to avoid wasting large amounts of space. So, in practice, optimum 
+node size depends critically on the characteristics of the system and the devices on which the
+file is allocated.
+
+节点包含大量键的优势是变得很简洁。作为分叉的因子，d增加的时候，对数增加，并且查找、插入和删除操作的开销减少。
+然而，实际上节点的大小是有限制的：很多硬件系统限制了数量的数量，能够转换到辅助存储设备上访问。与之相比，当数据传输大小
+增长时，我们的开销隐藏了常量因子。 最终，每个设备有一些固定轨迹大小，必须容纳避免浪费大量的空间。所以，在实际中，
+最适合的节点大小取决于系统和设备中文件严苟分配的大小。
+
+Bayer and McCreight [BAYE72] give some loose guidelines for choosing node sizes based on rotational delay 
+time, transfer rate, and key size. Their experiments verify that the model's optimal values perform well 
+in practice.
+
+Bayer 和 McCreight 给了一些零散的指南，基于转动延迟时间、传输速率和键的大小来选择节点大小。他们的实验验证了这个模型的最佳值，
+在实际中是起作用的。
+
+## Sequential Processing
+
+So far we have considered random transactions conducted by specifying a key. Often, users wish to view the 
+file as a sequential one, using the next operation to process all records in key-sequence order. In fact,
+one alternative to B-trees, the so called Indexed Sequential Access Method (ISAM) [GHOS69], assumes that 
+sequential accesses occur very frequently.
+
+Unfortunately, a B-tree may not do well in a sequential processing environment.  While a simple preorder 
+tree walk [KNUT68] extracts all the keys in order, it requires space for at least h = logd(n + 1)
+nodes in main memory since it stacks the nodes along a path from the root to avoid reading them twice. 
+Additionally, processing a next operation may require tracing a path through several nodes before reaching
+the desired key. For example, the smallest key is located in the leftmost leaf; finding it requires 
+accessing all nodes along a path from the root to that leaf as shown in Figure 12.
+
+What can be done to improve the cost of the next operation? This question and others will be answered in 
+the next section, under the topic "B+-trees."
