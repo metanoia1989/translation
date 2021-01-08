@@ -456,12 +456,15 @@ in practice.
 Bayer 和 McCreight 给了一些零散的指南，基于转动延迟时间、传输速率和键的大小来选择节点大小。他们的实验验证了这个模型的最佳值，
 在实际中是起作用的。
 
-## Sequential Processing
+## Sequential Processing 序列处理
 
 So far we have considered random transactions conducted by specifying a key. Often, users wish to view the 
 file as a sequential one, using the next operation to process all records in key-sequence order. In fact,
 one alternative to B-trees, the so called Indexed Sequential Access Method (ISAM) [GHOS69], assumes that 
 sequential accesses occur very frequently.
+
+到目前为止，我们考虑通过指定一个键来进行随机事务的引导。用户希望把文件看做一个序列，使用下一个操作，在有序的键序列中处理
+所有的记录。实际上，一个替代B树的，叫做索引序列访问方法（ISAM），假设序列访问是非常频繁的。
 
 Unfortunately, a B-tree may not do well in a sequential processing environment.  While a simple preorder 
 tree walk [KNUT68] extracts all the keys in order, it requires space for at least h = logd(n + 1)
@@ -470,5 +473,44 @@ Additionally, processing a next operation may require tracing a path through sev
 the desired key. For example, the smallest key is located in the leftmost leaf; finding it requires 
 accessing all nodes along a path from the root to that leaf as shown in Figure 12.
 
+不幸地，在序列处理环境中B可能做的并不好。在一个简单的前序树迭代提取所有有序的键期间，要求的最少 h = logd(n + 1)
+在主存中的节点空间，因为它们堆积的节点沿着从根节点开始的路径，避免被读两次。此外，处理下一个操作可能要求回溯一个路径，
+在抵达需要的键之前通过各个节点。例如，最小的键是定位在最左侧的叶子上；查找它要求访问所有的节点，沿着一条路径从根节点
+到示图12展示的叶子节点。
+
+![FIGURE 12. The locahon of the smallest key m the leftmost leaf of a B-tree. Reaching it requires logdn accesses.](./images/btree/figure12.png)
+
 What can be done to improve the cost of the next operation? This question and others will be answered in 
 the next section, under the topic "B+-trees."
+
+我们改进下一个操作的开销吗？这个问题和其他的都将会在下一个章节中被回答，在B+树的主题下。
+
+# 3. B-TREES VARIANTS B树变体
+As with most file organizations, variations of B-trees abound. Bayer and McCreight [BAYE72] suggest several 
+implementation alternatives in their original paper. For example, the underflow condition, resulting from 
+a deletion, is handled without concatenation by redistributing keys from neighboring nodes (unless the 
+requisite number of keys cannot be obtained). Applying the same strategy to the overflow condition can 
+delay splitting and eliminate the associated overhead. Thus, instead of splitting a node as soon as it fills 
+up, keys could merely be distributed into a neighboring node, splitting only when two neighbors fill.
+
+Other variations of B-trees have concentrated on improvements in the secondary costs. Clampet [CLAM64] 
+considers the cost of processing a node once it has been retrieved from secondary storage. He suggests 
+using a binary search instead of a linear lookup to locate the proper descendent pointer. Knuth [KNUT73] 
+points out that a binary search might be useful if the node is large, while a sequential search
+might be best for small nodes. There is no reason to limit internal searching to sequential or binary search; 
+any number of techniques from KNUT73 might be used.  In particular, Maruyama and Smith [MARc77] mention an
+extrapolation tech- nique they call the square root search.
+
+In their general treatment of index creation for a file, Ghosh and Senko [GHos69] consider the use of an 
+interpolation search to eliminate a secondary storage access.  The analysis presented generalizes to B-
+trees and indicates that it might be cost effective to eliminate some of the index levels just above the 
+leaves. Since a search would terminate with several possible candidate leaves, the correct one would be
+found by an "estimate" based on the key value and the key distribution within the file. When the estimate 
+produced the wrong leaf, a sequential search could be carried out. Although some estimates might miss,
+the method would pay off on the average.
+
+Knuth [KNUT73] suggests a B-tree variation which has varying "order" at each depth. Part of the motivation 
+comes from his observation that pointers in leaf nodes waste space and should be eliminated. It also makes 
+sense to have a different shape for the root (which is seldom very full compared to the other nodes). 
+Maintenance costs for this implementation seem rather high compared to the benefits, especially since secondary 
+storage is both inexpensive and well suited to fixed length nodes.
