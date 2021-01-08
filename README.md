@@ -15,6 +15,12 @@ CS241 -- Lecture Notes: B-Trees https://www.cpp.edu/~ftang/courses/CS241/notes/b
 B TREE in Data Structure: Search, Insert, Delete Operation Example https://www.guru99.com/b-tree-example.html   
 B - Tree Datastructure http://www.btechsmartclass.com/data_structures/b-trees.html  
 
+GeeksForGeeks的B树文章，非常的清晰，翻译出来，这些困难的知识点，必须花时间来一点点攻克，不能放逸地逃跑。    
+Introduction of B-Tree https://www.geeksforgeeks.org/introduction-of-b-tree-2/
+Insert Operation in B-Tree https://www.geeksforgeeks.org/insert-operation-in-b-tree/    
+Delete Operation in B-Tree https://www.geeksforgeeks.org/delete-operation-in-b-tree/    
+
+
 两篇B-Tree相关的论文        
 The Ubiquitous B-Tree http://carlosproal.com/ir/papers/p121-comer.pdf   
 Modern B-Tree Techniques https://w6113.github.io/files/papers/btreesurvey-graefe.pdf    
