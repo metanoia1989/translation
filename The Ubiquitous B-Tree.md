@@ -493,13 +493,23 @@ requisite number of keys cannot be obtained). Applying the same strategy to the 
 delay splitting and eliminate the associated overhead. Thus, instead of splitting a node as soon as it fills 
 up, keys could merely be distributed into a neighboring node, splitting only when two neighbors fill.
 
+作为最常见的文件组织形式，产生了各种B树变种。Bayer 和 McCreight 建议了几个替代源论文的是心啊。例如，下溢条件，
+由删除而产生的，是操作除了通过重新分配来自邻居节点的键的串（除非无法获取键的数目了）。应用一些策略到下溢条件上能够延迟
+分割和清除联系的顶部。因此，替代分割的节点很快就填满它，键仅仅分配给邻居节点，分割时仅仅当个邻居被填充。
+=_= 这一部分狗屁不通了，晕倒啊简直了          
+
 Other variations of B-trees have concentrated on improvements in the secondary costs. Clampet [CLAM64] 
 considers the cost of processing a node once it has been retrieved from secondary storage. He suggests 
 using a binary search instead of a linear lookup to locate the proper descendent pointer. Knuth [KNUT73] 
 points out that a binary search might be useful if the node is large, while a sequential search
 might be best for small nodes. There is no reason to limit internal searching to sequential or binary search; 
 any number of techniques from KNUT73 might be used.  In particular, Maruyama and Smith [MARc77] mention an
-extrapolation tech- nique they call the square root search.
+extrapolation technique they call the square root search.
+
+其他的B树变种专注提高次要的开销。Clampet 考虑处理一次节点的开销，从辅助存储设备检索。它建议使用二分搜索来替换
+线性查找定位合适的后裔指针。Knuth 指出如果节点非常大，二分搜索是有用的，而一些顺序搜索可能更适合小少的节点。
+那不是限制内部搜索使用顺序或者二分搜索的理由；来自KNUT73中的任意数量的技术都可能被使用。特别的，Maruyama 和 Smith
+提及了一个推理技术，他们叫做平方根搜索。
 
 In their general treatment of index creation for a file, Ghosh and Senko [GHos69] consider the use of an 
 interpolation search to eliminate a secondary storage access.  The analysis presented generalizes to B-
@@ -509,8 +519,96 @@ found by an "estimate" based on the key value and the key distribution within th
 produced the wrong leaf, a sequential search could be carried out. Although some estimates might miss,
 the method would pay off on the average.
 
+通常他们处理由文件创造的索引，Ghosh 和 Senko 考虑使用一个插补搜索来排除辅助存储设备的访问。这个分析表示泛化B树
+和标示，肯能会影响开销，清除一些仅仅在叶子等级上的索引。开始一个搜索可能在各种可能下合适离开结束，正确的发现可能是
+基于键值和在文件内键分配的预测。当预测生成错误的叶子时，一个顺序搜索可能完成了。尽管一些一些预测会错过，但这个方法
+在平均过程中能取得成功。
+
 Knuth [KNUT73] suggests a B-tree variation which has varying "order" at each depth. Part of the motivation 
 comes from his observation that pointers in leaf nodes waste space and should be eliminated. It also makes 
 sense to have a different shape for the root (which is seldom very full compared to the other nodes). 
 Maintenance costs for this implementation seem rather high compared to the benefits, especially since secondary 
 storage is both inexpensive and well suited to fixed length nodes.
+
+Knuth 建议的一个B树变体，在每个深度都有不同的度。部分意图来自他的观察，在叶子节点中的指针浪费空间并且应该被清除。
+它也生成了一个不同形状的根节点（很少但是与其他节点比起来完全不同）。与优势相比，这个实现的维护开销似乎很高，
+特别当辅助存储设备不昂贵和很好地固定节点的宽度。
+
+## B*-Trees
+Perhaps the most misused term in B-tree literature is B*-tree. Actually, Knuth [KNuT73] defines a B*-tree 
+to be a B-tree in which each node is at least 2/3 full (instead of just 1/2 full). B*-tree insertion 
+employs a local redistribution scheme to delay splitting until 2 sibling nodes are full.  Then the 2 nodes 
+are divided into 3, each 2/3 full. This scheme guarantees that storage utilization is at least 66%, while 
+requiring only moderate adjustment of the maintenance algorithms. It should be pointed out that increasing 
+storage utilization has the side effect of speeding up the search since the height of the resulting tree is
+smaller.  
+
+也许B*-tree是B树这一术语的最大滥用。事实上，Knuth 定义一个B*-tree作为B树，每个姐弟啊至少有2/3满（而不是仅仅1/2满），
+B*-tree插入利用了一个本地再分配方案，延迟分割直到有两个兄弟节点是满的。那时两个节点分割为3，每个都是2/3满的。
+这个方案保证存储利用率达到至少66%，并且要求适度调整维护算法。需要指出的是提高存储利用率是有副作用的，加速了搜索，
+因为生成树的高度更小了。
+
+
+The term B*-tree has frequently been applied to another, very popular variation of B-trees also suggested 
+by Knuth (cf.  [KNuT73, WEDE74, BAYE77]). To avoid confusion, we will use the term B+-tree for Knuth's 
+unnamed implementation.
+
+B*-tree术语也被频繁地应用到其他方面，非常受欢迎的B树变体也被Knuth建议。避免混淆，我们将使用术语B+树作为Knuth的
+未命名实现。
+
+## B+-Trees
+In a B+-tree, all keys reside in the leaves.  The upper levels, which are organized as a B-tree, consist 
+only of an index, a roadmap to enable rapid location of the index and key parts. Figure 13 shows the logical 
+separation of the index and key parts. Naturally, index nodes and leaf nodes may have different formats or 
+even different sizes. In particular, leaf nodes are usually linked together left-to-right, as shown. The 
+linked list of leaves is referred to as the sequence set. Sequence set links allow easy sequential processing.
+
+在一个B+数中，所有的键都放置在叶子中。在较高的层级中，是B树的组织形式，仅仅由索引组成的一个路标，开启快速定位的索引和键部分。
+图12展示了分隔索引和键部分的逻辑。 自然地，索引节点和叶子节点可能有不同的格式甚至不同的大小。特别的，叶子节点通常是从左到右的，
+如图所示。叶子的链表是顺序集合的引用。顺序集合链接允许很容易地进行顺序处理。
+
+![FIGURE 13. A B+-tree with separate index and key parts. Operations "by key" begin at the root as in a B-tree, sequential processing begins at the leftmost leaf.](./images/btree/figure13.png)
+
+To fully appreciate a B+-tree, one must understand the implications of having an independent index and sequence 
+set. Consider for a moment the find operation.
+
+要完整地领悟B+树，必须明白索引和序列集有依赖的隐含事实。进行查找操作时考虑一会儿。
+
+Searching proceeds from the root of a B+-tree through the index to a leaf. Since all keys reside in the 
+leaves, it does not matter what values are encountered as the search progresses as long as the path leads 
+to the correct leaf.
+
+搜索处理从B+树的根节点通过索引到达叶子节点。因为所有的键都放在叶子节点上，搜索过程中在很长的路径引导到合适的叶子，
+是没有关系的。
+
+During deletion in a B+-tree, the ability to leave non-key values in the index part as separators simplifies
+processing. The key to be deleted must always reside in a leaf so its removal is simple. As long as the leaf
+remains at least half full, the index need not be changed, even if a copy of the key had been propagated up 
+into it. Figure 14 shows how the copy of a deleted key can still direct searches to the correct leaf. Of
+course, if an underflow condition arises, the redistribution or concatenation procedures may require adjusting 
+values in the index as well as in the leaves.
+
+在B+树删除操作的期间，在索引部分离开非叶子节点值的能力作为分割简单的处理。键的删除必须总是在叶子节点上进行，这样移除
+是比较简单的。只要叶子节点剩余的能满足一般满，索引不需要改变，甚至如果复制键也扩散到节点里面。示图14展示了怎么拷贝一个
+被删除的键，仍然能正确地搜索到叶子节点。当然，如果下溢的情况出现了，重新分配或串联操作要求调整除叶子节点外的索引的值。
+
+Insertion and find operations in a B+-tree are processed almost identically to insertion and find operations 
+in a B-tree. When a leaf splits in two, instead of promoting the middle key, the algorithm promotes a copy of
+the key, retaining the actual key in the right leaf. Find operations differ from those in a B-tree in that 
+searching does not stop if a key in the index equals the query value. Instead, the nearest right pointer is 
+followed, and the search proceeds all the way to a leaf.
+
+在B+树中，插入和查找操作跟处理B树的插入和查找操作是一样的。当叶子节点分割为两个时，替代提升中间的键，这个算法提升复制的键，
+保留真实的键在右叶子善。查找操作跟B树有所不同，如果一个键的索引等于查找的值，搜索不会停止。反而，最近的右指针将被继承，
+而且所有处理所有的路径到叶子节点。  
+
+We have seen that B-trees, which support low-cost find, insert, and delete operations, may require logdn 
+accesses to secondary storage to process a next operation. The B+-tree implementation retains the loga-
+rithmic cost properties for operations by key, but gains the advantage of requiring at most 1 access to 
+satisfy a next operation.  Moreover, during the sequential processing of a file, no node will be accessed 
+more than once, so space for only 1 node need be available in main memory. Thus, B+-trees are well suited 
+to applications which entail both random and sequential processing.
+
+我们有这样的B树，支持低开销的查找、插入和删除操作，可能要求 logdn 的访问辅助存储设备来处理下一个操作。B+树实现了
+保留通过键操作的对数开销属性，但是添加的好处是要求每一次访问满足下一次操作。更多地，在顺序处理一个文件的期间，没有
+节点会被访问一次以上，所以在主存中只需要满足一个节点的空间。因此，B+树是很好的集合，应用随机访问和顺序处理两种操作的。      
